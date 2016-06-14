@@ -20,7 +20,6 @@ for s in 608; do
 		3dNetCorr -prefix ${WD}/${s}/${site}/netcorr_gordonROIs \
 		-in_rois ${WD}/ROIs/Gordon_333_cortical_2mm.nii.gz \
 		-inset /tmp/${s}_${site}/func_concat.nii.gz
-
 		cat ${WD}/${s}/${site}/netcorr_gordonROIs_000.netcc | tail -n 333 > ${WD}/${s}/${site}/GordonROIs_cormat
 
 		echo "${WD}/${s}/${site}/GordonROIs_cormat" | python /home/despoB/kaihwang/bin/TMSTha/run_mod.py > ${WD}/${s}/${site}/aveQ
@@ -28,8 +27,17 @@ for s in 608; do
 		3dNetCorr -prefix ${WD}/${s}/${site}/netcorr_tha_gordonROIs \
 		-in_rois ${WD}/ROIs/Tha_MTD_ROI_plus_Gordon.nii.gz \
 		-inset /tmp/${s}_${site}/func_concat.nii.gz
-
 		cat ${WD}/${s}/${site}/netcorr_tha_gordonROIs_000.netcc | tail -n 1 > ${WD}/${s}/${site}/Tha_GordonROIs_corrvec
+
+		3dNetCorr -prefix ${WD}/${s}/${site}/netcorr_tha_corticalTargets \
+		-in_rois ${WD}/ROIs/Cortical_targets_plus_Tha.nii.gz \
+		-inset /tmp/${s}_${site}/func_concat.nii.gz
+		cat ${WD}/${s}/${site}/netcorr_tha_corticalTargets_000.netcc | tail -n 1 > ${WD}/${s}/${site}/Tha_corticalTargets_corrvec
+
+		3dNetCorr -prefix ${WD}/${s}/${site}/netcorr_corticalTargets \
+		-in_rois ${WD}/ROIs/Cortical_Targets_Gordon.nii.gz \
+		-inset /tmp/${s}_${site}/func_concat.nii.gz
+		cat ${WD}/${s}/${site}/netcorr_corticalTargets_000.netcc | tail -n 32 > ${WD}/${s}/${site}/CorticalTargets_corrmat
 
 		3dmaskave -mask ${WD}/ROIs/Consensus_communities.nii \
 		-mrange 0.9 1.1 \
