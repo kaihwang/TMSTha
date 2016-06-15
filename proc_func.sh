@@ -2,7 +2,13 @@
 
 WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 
-for s in 609; do
+for s in 612; do
+
+	if [ ! -e ${WD}/${s}/Pre/MPRAGE/mprage_final.nii.gz]; then
+		
+		cd ${WD}/${s}/Pre/MPRAGE/	
+		preprocessMprage -r MNI_2mm -b "-R -f 0.2 -g -0.3" -d a -no_bias -o mprage_final.nii.gz -p "IM*"
+	fi
 
 	for site in Pre S1 IPL; do
 
@@ -31,6 +37,7 @@ for s in 609; do
 					-motion_censor fd=0.3,dvars=20 \
 					-nuisance_file nuisance_regressors.txt \
 					-nuisance_regression 6motion,d6motion,csf,dcsf,wm,dwm \
+					-cleanup \
 					-smoothing_kernel 4
 					#preprocessFunctional -resume
 

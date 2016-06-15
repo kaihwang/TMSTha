@@ -2,7 +2,7 @@ WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 MTD='/home/despoB/kaihwang/bin/TTD/Models'
 
 
-for s in 607; do
+for s in 609; do
 
 	cd ${WD}/${s}/Pre/
 
@@ -37,7 +37,8 @@ for s in 607; do
 	-bucket Tha_seed_cor 
 
 	ln -s ~/standard/mni_icbm152_nlin_asym_09c/mni_icbm152_t1_tal_nlin_asym_09c_brain.nii template.nii
-	ln -s ~/Rest/TMS_Thalamus/ROIs/RIPL.nii.gz RIPL.nii.gz
+	3dcopy ~/Rest/TMS_Thalamus/ROIs/RIPL.nii.gz RIPL
+	3drefit -view tlrc RIPL+orig
 
 	rm func_concat.nii.gz
 
