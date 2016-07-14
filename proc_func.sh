@@ -2,7 +2,7 @@
 
 WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 
-for s in 612; do
+for s in 614; do
 
 	if [ ! -e ${WD}/${s}/Pre/MPRAGE/mprage_final.nii.gz]; then
 		

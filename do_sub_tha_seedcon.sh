@@ -2,11 +2,11 @@ WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 MTD='/home/despoB/kaihwang/bin/TTD/Models'
 
 
-for s in 609; do
+for s in 613 614; do
 
 	cd ${WD}/${s}/Pre/
 
-	3dTcat -prefix func_concat.nii.gz Run1/brnswktm_functional_4.nii.gz Run2/brnswktm_functional_4.nii.gz
+	3dTcat -prefix func_concat.nii.gz Run1/brnswktm_functional_4.nii.gz Run2/brnswktm_functional_4.nii.gz Run3/brnswktm_functional_4.nii.gz
 
 	# 3dmaskave -mask ~/Rest/ROIs/community_subject_1500_8.0_25_2mm_filled_shifted.nii \
 	# -mrange 0.9 1.1 \
