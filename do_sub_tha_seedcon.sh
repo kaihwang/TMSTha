@@ -2,7 +2,7 @@ WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 MTD='/home/despoB/kaihwang/bin/TTD/Models'
 
 
-for s in 613 614; do
+for s in 613; do
 
 	cd ${WD}/${s}/Pre/
 
