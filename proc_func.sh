@@ -4,11 +4,11 @@ WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 
 for s in 614; do
 
-	if [ ! -e ${WD}/${s}/Pre/MPRAGE/mprage_final.nii.gz]; then
-		
-		cd ${WD}/${s}/Pre/MPRAGE/	
-		preprocessMprage -r MNI_2mm -b "-R -f 0.2 -g -0.3" -d a -no_bias -o mprage_final.nii.gz -p "IM*"
-	fi
+	#if [ ! -e ${WD}/${s}/Pre/MPRAGE/mprage_final.nii.gz]; then
+	#	
+	#	cd ${WD}/${s}/Pre/MPRAGE/	
+	#	preprocessMprage -r MNI_2mm -b "-R -f 0.2 -g -0.3" -d a -no_bias -o mprage_final.nii.gz -p "IM*"
+	#fi
 
 	for site in Pre S1 IPL; do
 
@@ -18,14 +18,15 @@ for s in 614; do
 
 				cd ${WD}/${s}/${site}/Run${run}
 
-				if [ ! -e ${WD}/${s}/${site}/Run${run}/brnswktm_functional_4.nii.gz ]; then
+				if [ ! -e ${WD}/${s}/${site}/Run${run}/nfswktm_functional_0.nii.gz ]; then
 					
+					tar -xf functional_dicom.tar.gz
+
 					preprocessFunctional -dicom "IM*" \
 					-mprage_bet ${WD}/${s}/Pre/MPRAGE/mprage_bet.nii.gz \
 					-warpcoef ${WD}/${s}/Pre/MPRAGE/mprage_warpcoef.nii.gz \
 					-func_refimg ${WD}/${s}/${site}/SBRef/*.dcm \
 					-tr 1.0 \
-					-bandpass_filter 0.009 0.08 \
 					-rescaling_method 100_voxelmean \
 					-template_brain MNI_2mm \
 					-func_struc_dof bbr \
@@ -35,11 +36,24 @@ for s in 614; do
 					-custom_slice_times detect \
 					-delete_dicom archive \
 					-motion_censor fd=0.3,dvars=20 \
-					-nuisance_file nuisance_regressors.txt \
-					-nuisance_regression 6motion,d6motion,csf,dcsf,wm,dwm \
+					-nuisance_compute 6motion,d6motion,csf,dcsf,wm,dwm \
 					-cleanup \
-					-smoothing_kernel 4
-					#preprocessFunctional -resume
+					-no_smooth
+
+					3dpc -mask .template_csf_prob.nii.gz -pcsave 5 -prefix csf_PC nfswktm_functional_0.nii.gz
+					3dpc -mask .template_wm_prob.nii.gz -pcsave 5 -prefix wm_PC nfswktm_functional_0.nii.gz
+
+					3dmaskave -quiet \
+					-mask /home/despoB/connectome-thalamus/ROIs/Thalamus_surround_cortical_mask_LPI.nii.gz \
+					nfswktm_functional_0.nii.gz > ncs.1D
+
+					3dTproject -input nfswktm_functional_0.nii.gz \
+					-ort csf_PC_vec.1D \
+					-ort wm_PC_vec.1D \
+					-ort motion.par \
+					-passband 0.008 0.09 \
+					-automask \
+					-prefix preproc_functinal.nii.gz	
 
 				fi
 			fi
