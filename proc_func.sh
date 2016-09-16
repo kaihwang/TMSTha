@@ -2,7 +2,7 @@
 
 WD='/home/despoB/kaihwang/Rest/TMS_Thalamus/'
 
-for s in 614; do
+for s in 606; do
 
 	#if [ ! -e ${WD}/${s}/Pre/MPRAGE/mprage_final.nii.gz]; then
 	#	
@@ -18,7 +18,7 @@ for s in 614; do
 
 				cd ${WD}/${s}/${site}/Run${run}
 
-				if [ ! -e ${WD}/${s}/${site}/Run${run}/nfswktm_functional_0.nii.gz ]; then
+				if [ ! -e ${WD}/${s}/${site}/Run${run}/nfwktm_functional.nii.gz ]; then
 					
 					tar -xf functional_dicom.tar.gz
 
@@ -40,14 +40,14 @@ for s in 614; do
 					-cleanup \
 					-no_smooth
 
-					3dpc -mask .template_csf_prob.nii.gz -pcsave 5 -prefix csf_PC nfswktm_functional_0.nii.gz
-					3dpc -mask .template_wm_prob.nii.gz -pcsave 5 -prefix wm_PC nfswktm_functional_0.nii.gz
+					3dpc -vmean -mask .template_csf_prob.nii.gz -pcsave 5 -prefix csf_PC nfwktm_functional.nii.gz
+					3dpc -vmean -mask .template_wm_prob.nii.gz -pcsave 5 -prefix wm_PC nfwktm_functional.nii.gz
 
 					3dmaskave -quiet \
 					-mask /home/despoB/connectome-thalamus/ROIs/Thalamus_surround_cortical_mask_LPI.nii.gz \
-					nfswktm_functional_0.nii.gz > ncs.1D
+					nfwktm_functional.nii.gz > ncs.1D
 
-					3dTproject -input nfswktm_functional_0.nii.gz \
+					3dTproject -input nfwktm_functional.nii.gz \
 					-ort csf_PC_vec.1D \
 					-ort wm_PC_vec.1D \
 					-ort motion.par \
